@@ -15,14 +15,14 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-
 jar {
-    baseName = 'eureka-service'
+    baseName = 'gateway-service'
     version = '0.0.1-SNAPSHOT'
 }
 
+
 springBoot {
-    mainClass = "com.sandbox.eureka.Application"
+    mainClass = "com.sandbox.gateway.Application"
 }
 
 
@@ -32,14 +32,22 @@ repositories {
     mavenCentral()
     maven { url "http://repo.spring.io/milestone" }
     maven { url "http://repo.spring.io/libs-release" }
-
 }
-
 
 
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-config'
     compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+    compile 'org.springframework.cloud:spring-cloud-starter-zuul'
+
+    compile("org.springframework.cloud:spring-cloud-starter-hystrix")
+    compile("org.springframework.cloud:spring-cloud-starter-hystrix-dashboard")
+    compile("org.springframework.cloud:spring-cloud-starter-feign")
+
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 
 dependencyManagement {

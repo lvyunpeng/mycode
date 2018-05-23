@@ -1,0 +1,86 @@
+server:
+  port: 8899 # 服务端口
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 10
+spring:
+  cloud:
+    config:
+      enabled: false
+  application:
+    name: gateway-service # 服务名称
+
+zuul.host.socket-timeout-millis: 60000
+zuul.host.connect-timeout-millis: 60000
+zuul.semaphore.max-semaphores: 5000
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 100000
+
+app.config.internal.api.secret: pq0194mxoqfh48L362G6R09T737E273X
+
+hystrix.threadpool.default.coreSize: 1000
+hystrix.threadpool.default.maximumSize: 1000
+hystrix.threadpool.default.allowMaximumSizeToDivergeFromCoreSize: true
+
+management.security.enabled: false
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+ribbon:
+  ReadTimeout: 100000
+  ConnectTimeout: 100000
+
+zuul:
+  routes:
+    users:
+      path: /user/**
+      serviceId: user-service
+    game:
+      path: /game/**
+      serviceId: game-service
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
+
+
+---
+spring:
+  profiles: test
+
+eureka:
+  instance:
+    hostname: peers1
+  client:
+    serviceUrl:
+      defaultZone: http://peers2:${server.port}/eureka/
+
+
+logging.level.org.springframework.web: ERROR
+logging.level.org.hibernate: ERROR
+
+
+---
+spring:
+  profiles: peers2
+
+eureka:
+  instance:
+    hostname: peers2
+  client:
+    serviceUrl:
+      defaultZone: http://peers1:${server.port}/eureka/
+
+
+logging.level.org.springframework.web: ERROR
+logging.level.org.hibernate: ERROR
+
+

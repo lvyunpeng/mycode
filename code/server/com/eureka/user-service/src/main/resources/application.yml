@@ -1,0 +1,88 @@
+server:
+  port: 8815 # 服务端口
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-expiration-duration-in-seconds: 90
+    lease-renewal-interval-in-seconds: 30
+spring:
+  cloud:
+    config:
+      enabled: false
+  application:
+    name: user-service # 服务名称
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/gamedb?characterEncoding=utf-8
+    username: root
+    password: 1
+    driver-class-name: com.mysql.jdbc.Driver
+    max-active: 50
+    initial-size: 5
+    max-idle: 20
+    min-idle: 10
+    max-wait: 10000
+    suspect-timeout: 60
+    time-between-eviction-runs-millis: 30000
+    min-evictable-idle-time-millis: 60000
+    validation-query: SELECT 1
+    validation-interval: 30000
+    test-on-borrow: true
+    remove-abandoned: true
+    remove-abandoned-timeout: 60
+    abandon-when-percentage-full: 10
+    jdbc-interceptors: ResetAbandonedTimer;StatementFinalizer
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+
+bmg:
+  redis:
+    pool:
+      max-active: 8
+      max-idle: 8
+      min-idle: 0
+      max-wait: -1
+
+# Redis自定义配置
+bmg.redis.persist.host: 127.0.0.1
+bmg.redis.persist.port: 6379
+
+bmg.redis.cache.host: 127.0.0.1
+bmg.redis.cache.port: 6379
+
+health.config.enabled: false
+
+hystrix.command.default.execution.timeout.enabled: true
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 30000
+hystrix.threadpool.default.coreSize: 30
+hystrix.threadpool.default.maximumSize: 80
+hystrix.command.default.circuitBreaker.requestVolumeThreshold: 100
+hystrix.threadpool.default.allowMaximumSizeToDivergeFromCoreSize: true
+
+ribbon.ReadTimeout: 60000
+ribbon.ConnectTimeout: 60000
+
+feign.hystrix.enabled: false
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
+
+
+---
+spring:
+  profiles: test
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/,http://10.0.0.35:8761/eureka/
+
+logging.level.org.springframework.web: ERROR
+logging.level.org.hibernate: ERROR
+
+
